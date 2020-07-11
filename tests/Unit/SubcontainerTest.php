@@ -71,7 +71,10 @@ class SubcontainerTest extends TestCase
 
 		$path = $this->banner->getBannerUrl(100, 50, 'bar');
 
-		$this->assertEquals('/data/foo/100x50-bar.png', $path);
+		$basePath = rtrim($this->app()->request()->getBasePath(), '/') . '/';
+		$externalDataUrl = $this->app()->config('externalDataUrl');
+
+		$this->assertEquals($basePath . $externalDataUrl . '/foo/100x50-bar.png', $path);
 	}
 
 	public function test_generateBanner_logs_error_for_invalid_colour()
