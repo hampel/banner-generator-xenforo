@@ -1,26 +1,15 @@
 <?php namespace Hampel\BannerGenerator\XF\Template;
 
+use Hampel\BannerGenerator\SubContainer\Banner;
+
 class Templater extends XFCP_Templater
 {
-	public function fnBanner($templater, &$escape, $sizes, $id = '')
+	public function fnBanner($templater, &$escape, $width, $height, $id = '', $colour = '')
 	{
-		if (!is_array($sizes))
-		{
-			$sizes = array($sizes);
-		}
+		/** @var Banner $banner */
+		$banner = $this->app->get('banner');
 
-		$key = array_rand($sizes);
-
-		$size = $sizes[$key];
-
-		$bannerPath = $this->getAbstractedBannerPath($size);
-
-		$fs = $this->app->fs();
-
-		if (!$fs->has($bannerPath))
-		{
-			return "[Banner not found: {$size}]";
-		}
+		$banner->generateBanner($width, $height, $colour);
 
 		$escape = false;
 
@@ -30,16 +19,8 @@ class Templater extends XFCP_Templater
 			$divId = 'id="' . $id . '" ';
 		}
 
-		return '<div ' . $divId . '><img src="' . $this->getBannerUrl($size) . '" alt="' . $size . ' banner" /></div>';
-	}
-
-	public function getAbstractedBannerPath($size)
-	{
-		return sprintf('data://banner-test/%s.png', $size);
-	}
-
-	public function getBannerUrl($size)
-	{
-		return \XF::app()->applyExternalDataUrl(sprintf('banner-test/%s.png', $size));
+		return '<div ' . $divId . '>' . PHP_EOL . "\t" .
+			'<img src="' . $banner->getBannerUrl($width, $height, $colour) . '" alt="' . $width . 'x' . $height . ' banner" />' . PHP_EOL .
+			'</div>';
 	}
 }
