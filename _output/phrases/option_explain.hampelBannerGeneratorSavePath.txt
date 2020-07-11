@@ -1,0 +1,1 @@
+Path to save banners - relative to data directory

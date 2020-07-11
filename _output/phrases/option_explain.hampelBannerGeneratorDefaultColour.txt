@@ -1,0 +1,1 @@
+Colour to generate banners when not specified in the template

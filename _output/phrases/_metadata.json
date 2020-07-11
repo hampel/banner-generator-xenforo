@@ -1,0 +1,92 @@
+{
+    "hampel_bannergenerator_colour_black.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "e90dfb84e30edf611e326eeb04d680de"
+    },
+    "hampel_bannergenerator_colour_blue.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "9594eec95be70e7b1710f730fdda33d9"
+    },
+    "hampel_bannergenerator_colour_cyan.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "023c239d2f2538f140a20e72c7b73f20"
+    },
+    "hampel_bannergenerator_colour_green.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "d382816a3cbeed082c9e216e7392eed1"
+    },
+    "hampel_bannergenerator_colour_grey.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "caf3a042a037c064b7513ed640c22f77"
+    },
+    "hampel_bannergenerator_colour_magenta.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "b91cc2c1416fcca942b61c7ac5b1a9ac"
+    },
+    "hampel_bannergenerator_colour_red.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "ee38e4d5dd68c4e440825018d549cb47"
+    },
+    "hampel_bannergenerator_colour_white.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "25a81701fbfa4a1efdf660a950c1d006"
+    },
+    "hampel_bannergenerator_colour_yellow.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "51e6cd92b6c45f9affdc158ecca2b8b8"
+    },
+    "option.hampelBannerGeneratorDefaultColour.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "2065ce91a56db43200c8213188a53271"
+    },
+    "option.hampelBannerGeneratorSavePath.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "f3c7c46d5fc1b33f6a8159f65e0c33cf"
+    },
+    "option_explain.hampelBannerGeneratorDefaultColour.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "634ebaa8e36387b33b71b80fdd350144"
+    },
+    "option_explain.hampelBannerGeneratorSavePath.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "1727c1f29f8fd460b75ead242d0933a4"
+    },
+    "option_group.hampelBannerGenerator.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "c0dd0123efe0220ca5952ea6e876f45a"
+    },
+    "option_group_description.hampelBannerGenerator.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "0f0bed6002dde11ba9accada7b7786a6"
+    }
+}
