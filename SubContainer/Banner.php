@@ -114,8 +114,12 @@ class Banner extends AbstractSubContainer
 
 	public function getAbstractedDataPath($width, $height, $colour)
 	{
-		$destPath = SavePath::get();
-		return sprintf('data://%s/%dx%d-%s.png', $destPath, $width, $height, $colour);
+		return sprintf('data://%s/%dx%d-%s.png', SavePath::get(), $width, $height, $colour);
+	}
+
+	public function getBannerUrl($width, $height, $colour)
+	{
+		return \XF::app()->applyExternalDataUrl(sprintf('%s/%dx%d-%s.png', SavePath::get(), $width, $height, $colour));
 	}
 
 	public function getColours()
