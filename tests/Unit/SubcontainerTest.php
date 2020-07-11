@@ -65,7 +65,7 @@ class SubcontainerTest extends TestCase
 		$this->assertEquals('data://foo/100x50-bar.png', $path);
 	}
 
-	public function test_generateBanner_logs_error_for_no_colour()
+	public function test_generateBanner_logs_error_for_invalid_colour()
 	{
 		$this->fakesErrors();
 
@@ -74,7 +74,7 @@ class SubcontainerTest extends TestCase
 		$this->assertErrorLogged("Invalid colour specified for banner test: foo");
 	}
 
-	public function test_generateBanner_returns_null_for_existing_image()
+	public function test_generateBanner_returns_empty_for_existing_image()
 	{
 		$this->swapFs('data');
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
@@ -90,7 +90,7 @@ class SubcontainerTest extends TestCase
 		$this->assertTrue($this->app->fs()->has($path));
 		$this->assertEquals(0, $this->app->fs()->getSize($path));
 
-		$this->assertEquals($path, $this->banner->generateBanner(100, 50, 'red'));
+		$this->assertEmpty($this->banner->generateBanner(100, 50, 'red'));
 
 		// check new file hasn't been created
 		$this->assertTrue($this->app->fs()->has($path));

@@ -83,7 +83,7 @@ class Banner extends AbstractSubContainer
 
 		if ($fs->has($destImage) && !$force)
 		{
-			return $destImage; // already have a banner generated
+			return ""; // already have a banner generated
 		}
 
 		return $this->_generateBanner($width, $height, $colour, $destImage);
