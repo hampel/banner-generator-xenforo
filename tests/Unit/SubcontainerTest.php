@@ -65,6 +65,16 @@ class SubcontainerTest extends TestCase
 		$this->assertEquals('data://foo/100x50-bar.png', $path);
 	}
 
+	public function test_getAbstractedDataPath_default_colour()
+	{
+		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
+		$this->setOption('hampelBannerGeneratorDefaultColour', 'baz');
+
+		$path = $this->banner->getAbstractedDataPath(100, 50);
+
+		$this->assertEquals('data://foo/100x50-baz.png', $path);
+	}
+
 	public function test_getBannerUrl()
 	{
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
@@ -75,6 +85,19 @@ class SubcontainerTest extends TestCase
 		$externalDataUrl = $this->app()->config('externalDataUrl');
 
 		$this->assertEquals($basePath . $externalDataUrl . '/foo/100x50-bar.png', $path);
+	}
+
+	public function test_getBannerUrl_default_colour()
+	{
+		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
+		$this->setOption('hampelBannerGeneratorDefaultColour', 'baz');
+
+		$path = $this->banner->getBannerUrl(100, 50);
+
+		$basePath = rtrim($this->app()->request()->getBasePath(), '/') . '/';
+		$externalDataUrl = $this->app()->config('externalDataUrl');
+
+		$this->assertEquals($basePath . $externalDataUrl . '/foo/100x50-baz.png', $path);
 	}
 
 	public function test_generateBanner_logs_error_for_invalid_colour()
@@ -130,8 +153,9 @@ class SubcontainerTest extends TestCase
 	{
 		$this->swapFs('data');
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
+		$this->setOption('hampelBannerGeneratorDefaultColour', 'blue');
 
-		$path = 'data://foo/100x50-green.png';
+		$path = 'data://foo/100x50-blue.png';
 
 		// check there's nothing there now
 		$this->assertFalse($this->app->fs()->has($path));
