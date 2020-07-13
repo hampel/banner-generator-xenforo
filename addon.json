@@ -1,14 +1,19 @@
 {
     "legacy_addon_id": "",
     "title": "Banner Advert Generator",
-    "description": "",
-    "version_id": 1000031,
-    "version_string": "1.0.0 Beta 1",
-    "dev": "",
-    "dev_url": "",
+    "description": "Generates simple image-based banner adverts to help you style advert placements",
+    "version_id": 1000032,
+    "version_string": "1.0.0 Beta 2",
+    "dev": "Simon Hampel",
+    "dev_url": "https://bitbucket.org/hampel/",
     "faq_url": "",
-    "support_url": "",
-    "extra_urls": [],
-    "require": [],
-    "icon": ""
+    "support_url": "https://bitbucket.org/hampel/banner-generator-xenforo/issues",
+    "extra_urls": {
+        "Git Repository": "https://bitbucket.org/hampel/banner-generator-xenforo",
+        "Twitter": "https://twitter.com/SimonHampel"
+    },
+    "require": {
+        "php-ext/gd": ["*", "GD extension"]
+    },
+    "icon": "fa-ad"
 }
