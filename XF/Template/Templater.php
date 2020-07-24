@@ -19,7 +19,7 @@ class Templater extends XFCP_Templater
 			$divId = 'id="' . $id . '" ';
 		}
 
-		return '<div ' . $divId . ' style="width: ' . $width . 'px; height: ' . $height . 'px;">' . PHP_EOL . "\t" .
+		return '<div ' . $divId . 'class="banner-ad" style="width: ' . $width . 'px; height: ' . $height . 'px;">' . PHP_EOL . "\t" .
 			'<img src="' . $banner->getBannerUrl($width, $height, $colour) . '" alt="' . $width . 'x' . $height . ' banner" />' . PHP_EOL .
 			'</div>';
 	}
