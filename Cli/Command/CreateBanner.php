@@ -11,7 +11,7 @@ class CreateBanner extends Command
 	protected function configure()
 	{
 		$this
-			->setName('xf:create-banner')
+			->setName('banner:create')
 			->setDescription('Create a banner')
 			->addOption(
 				'width',
