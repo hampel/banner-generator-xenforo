@@ -13,4 +13,6 @@
 
 		
 * Testing:
+	* unit tests for banner generation using Flysystem memory adapter
+	* ...
 	
