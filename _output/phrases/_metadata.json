@@ -53,6 +53,12 @@
         "version_string": "1.0.0 Beta 1",
         "hash": "51e6cd92b6c45f9affdc158ecca2b8b8"
     },
+    "option.hampelBannerGeneratorDefaultClasses.txt": {
+        "global_cache": false,
+        "version_id": 1000070,
+        "version_string": "1.0.0",
+        "hash": "7999f63dcff3260d1840b00e405db689"
+    },
     "option.hampelBannerGeneratorDefaultColour.txt": {
         "global_cache": false,
         "version_id": 1000031,
@@ -64,6 +70,12 @@
         "version_id": 1000031,
         "version_string": "1.0.0 Beta 1",
         "hash": "f3c7c46d5fc1b33f6a8159f65e0c33cf"
+    },
+    "option_explain.hampelBannerGeneratorDefaultClasses.txt": {
+        "global_cache": false,
+        "version_id": 1000070,
+        "version_string": "1.0.0",
+        "hash": "23873d2ecb02cbacddfde3dc05ff1727"
     },
     "option_explain.hampelBannerGeneratorDefaultColour.txt": {
         "global_cache": false,
