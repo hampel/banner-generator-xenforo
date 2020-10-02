@@ -1,6 +1,6 @@
 <?php namespace Tests\Unit;
 
-use Hampel\BannerTest\SubContainer\Banner;
+use Hampel\BannerGenerator\SubContainer\Banner;
 use Tests\TestCase;
 use XF\Phrase;
 
