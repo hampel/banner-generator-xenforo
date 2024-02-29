@@ -5,12 +5,12 @@
     "version_id": 1010070,
     "version_string": "1.1.0",
     "dev": "Simon Hampel",
-    "dev_url": "https://bitbucket.org/hampel/",
+    "dev_url": "https://xenforo.com/community/members/sim.4264/",
     "faq_url": "",
-    "support_url": "https://bitbucket.org/hampel/banner-generator-xenforo/issues",
+    "support_url": "https://xenforo.com/community/threads/banner-advert-generator.182747/",
     "extra_urls": {
-        "Git Repository": "https://bitbucket.org/hampel/banner-generator-xenforo",
-        "Twitter": "https://twitter.com/SimonHampel"
+        "Addon": "https://xenforo.com/community/resources/banner-advert-generator.7901/",
+        "Git Repository": "https://github.com/hampel/banner-generator-xenforo"
     },
     "require": {
         "php": [
