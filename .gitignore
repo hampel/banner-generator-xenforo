@@ -1,3 +1,4 @@
 _data/
 _releases/
 vendor/
+.phpunit.result.cache
