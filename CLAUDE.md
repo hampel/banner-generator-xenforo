@@ -31,6 +31,14 @@ vendor/bin/phpunit --filter test_generateBanner_generates_image
 suite runs against the real install, so the add-on must be installed there for its options to
 exist.
 
+`$addonsToLoad` limits that boot to this add-on — its listeners, extensions and autoloaders only.
+Without it, any other installed add-on that vendors a different PHPUnit major is loaded into the
+run, and the suite dies before its first test.
+
+**Drive `banner:create` in tests through `ArgvInput`, never `ArrayInput`.** `ArrayInput` hands an
+option `true` whatever its mode, so it cannot tell a flag from an optional-value option — which is
+exactly the bug `--force` once had. `tests/Unit/CreateBannerTest.php` shows the form.
+
 `cmd.php` resolves the install from its own location, so XF commands run unchanged from here:
 
 ```bash
