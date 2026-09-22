@@ -90,9 +90,11 @@ never ship.
 
 ## Traps
 
-- **`fnBanner()` sets `$escape = false` and concatenates `id` and `class` unescaped.** Templates
-  are admin-authored, so this is not user input today, but anything passing a variable into those
-  arguments is writing raw HTML.
+- **`fnBanner()` sets `$escape = false`, so it escapes its own inputs.** It returns markup, which
+  the templater would otherwise escape; in exchange every argument that reaches an attribute —
+  `id`, the class list, the URL built from `colour` — goes through `\XF::escapeString()`, and the
+  dimensions are cast to `int`. A new argument needs the same treatment, since a template may pass
+  a variable where an admin would type a literal.
 - **`banner:create --force` without a value does not force.** The option is declared
   `VALUE_OPTIONAL`, so a bare `--force` yields `null` and `boolval()` makes it false; only
   `--force=1` regenerates. An invalid `--colour` also exits `0`.

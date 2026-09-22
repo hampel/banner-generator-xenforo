@@ -89,6 +89,21 @@ class TemplaterTest extends TestCase
 		$this->assertEquals($expected, $banner);
 	}
 
+	public function test_Banner_escapes_attributes()
+	{
+		$this->setOption('hampelBannerGeneratorDefaultClasses', '');
+
+		$escape = true;
+		$banner = $this->templater->fnBanner($this->templater, $escape, '200"', 100, 'a"b', 'c<d');
+
+		$expected = '<div id="a&quot;b" class="c&lt;d" style="width: 200px; height: 100px;">' . PHP_EOL . "\t" .
+						'<img src="foo" alt="200x100 banner" />' . PHP_EOL .
+					'</div>';
+
+		$this->assertEquals($expected, $banner);
+		$this->assertFalse($escape);
+	}
+
 	public function test_Banner_id_class_default_class()
 	{
 		$this->setOption('hampelBannerGeneratorDefaultClasses', 'default-class');
