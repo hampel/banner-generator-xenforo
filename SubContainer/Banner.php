@@ -105,7 +105,11 @@ class Banner extends AbstractSubContainer
 		$tempFile = File::getTempFile();
 
 		imagepng($im, $tempFile);
-		imagedestroy($im);
+
+		if (PHP_VERSION_ID < 80000)
+		{
+			imagedestroy($im); // a no-op since PHP 8.0, and deprecated in 8.5
+		}
 
 		File::copyFileToAbstractedPath($tempFile, $dest);
 
