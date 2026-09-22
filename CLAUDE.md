@@ -62,7 +62,10 @@ file exists, so the cost after the first render is one `has()` call. Nothing eve
 banner: changing the save path, the default colour or a size leaves the old files in `data/`.
 
 `generateBanner()` returns the path when it wrote a file, `""` when the file already existed, and
-`null` on an invalid colour or a GD failure — the CLI command distinguishes the first two only.
+`null` after logging an error — a size below 1, an unknown colour, or a GD failure. **Callers
+must tell `""` from `null`**: `banner:create` exits 1 on `null`. Invalid input is logged on every
+render until the template is fixed, and `fnBanner()` renders nothing for an invalid size, so that
+the template around it survives.
 
 ### The `banner` sub-container owns the colours and the paths
 
