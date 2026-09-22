@@ -109,6 +109,24 @@ class SubcontainerTest extends TestCase
 		$this->assertErrorLogged("Invalid colour specified for banner test: foo");
 	}
 
+	public function test_isValidSize()
+	{
+		$this->assertTrue($this->banner->isValidSize(100, 50));
+		$this->assertTrue($this->banner->isValidSize('100', '50'));
+		$this->assertFalse($this->banner->isValidSize(0, 50));
+		$this->assertFalse($this->banner->isValidSize(100, -1));
+		$this->assertFalse($this->banner->isValidSize('auto', 50));
+	}
+
+	public function test_generateBanner_logs_error_for_invalid_size()
+	{
+		$this->fakesErrors();
+
+		$this->assertNull($this->banner->generateBanner(0, 50, 'red'));
+
+		$this->assertErrorLogged("Invalid dimensions specified for banner test: 0x50");
+	}
+
 	public function test_generateBanner_returns_empty_for_existing_image()
 	{
 		$this->swapFs('data');

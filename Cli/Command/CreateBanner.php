@@ -74,7 +74,12 @@ class CreateBanner extends Command
 
 		$dest = $banner->generateBanner($width, $height, $colour, $force);
 
-		if (empty($dest))
+		if ($dest === null)
+		{
+			$output->writeln("<error>Banner could not be generated - see the error log</error>");
+			return 1;
+		}
+		elseif (empty($dest))
 		{
 			$output->writeln("Banner already exists");
 		}

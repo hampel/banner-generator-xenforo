@@ -19,8 +19,11 @@ class TemplaterTest extends TestCase
 		$this->mock('banner', Banner::class, function ($mock) {
 			$mock->allows([
 				'generateBanner' => null,
-				'getBannerUrl' => 'foo'
+				'getBannerUrl' => 'foo',
 			]);
+			$mock->allows('isValidSize')->andReturnUsing(function ($width, $height) {
+				return intval($width) > 0 && intval($height) > 0;
+			});
 		});
 	}
 
@@ -102,6 +105,15 @@ class TemplaterTest extends TestCase
 
 		$this->assertEquals($expected, $banner);
 		$this->assertFalse($escape);
+	}
+
+	public function test_Banner_returns_nothing_for_invalid_size()
+	{
+		$escape = true;
+
+		$this->assertSame('', $this->templater->fnBanner($this->templater, $escape, 0, 90));
+		$this->assertSame('', $this->templater->fnBanner($this->templater, $escape, 'auto', 90));
+		$this->assertSame('', $this->templater->fnBanner($this->templater, $escape, 728, -1));
 	}
 
 	public function test_Banner_id_class_default_class()

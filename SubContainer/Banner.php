@@ -66,6 +66,12 @@ class Banner extends AbstractSubContainer
 
 	public function generateBanner($width, $height, $colourKey = '', $force = false)
 	{
+		if (!$this->isValidSize($width, $height))
+		{
+			\XF::logError("Invalid dimensions specified for banner test: {$width}x{$height}");
+			return;
+		}
+
 		if (empty($colourKey))
 		{
 			$colourKey = DefaultColour::get();
@@ -114,6 +120,11 @@ class Banner extends AbstractSubContainer
 		File::copyFileToAbstractedPath($tempFile, $dest);
 
 		return $dest;
+	}
+
+	public function isValidSize($width, $height)
+	{
+		return intval($width) > 0 && intval($height) > 0;
 	}
 
 	public function getAbstractedDataPath($width, $height, $colour = '')

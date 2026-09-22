@@ -16,6 +16,11 @@ class Templater extends XFCP_Templater
 
 		$escape = false;
 
+		if (!$banner->isValidSize($width, $height))
+		{
+			return '';
+		}
+
 		$divHtml = empty($id) ? '' : ' id="' . \XF::escapeString($id) . '"';
 
 		$options = $this->app->options();
