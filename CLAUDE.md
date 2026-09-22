@@ -13,7 +13,8 @@ Read the install root's `AGENTS.md` for everything install-wide: `cmd.php` signa
 `_output/` ⇄ database import boundary, the version bump that opens a cycle of new work, and the
 `xf-dev:export` prohibition. None of that is repeated here.
 
-- `README.md` is customer-facing and deliberately short — links to the resource and support thread.
+- `README.md` is customer-facing: requirements, the `banner()` arguments, the command and the
+  options. Change it when behaviour a site owner can see changes.
 - `CHANGELOG.md` is hand-maintained, one section per release.
 - `TESTING.md` is the checklist of what the add-on touches in core; it is stripped from the build.
 
