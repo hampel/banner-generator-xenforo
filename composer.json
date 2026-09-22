@@ -1,8 +1,9 @@
 {
 	"license": "MIT",
 	"require-dev": {
-		"hampel/xenforo-test-framework": "^3.0",
-		"league/flysystem-memory": "^1.0"
+		"hampel/xenforo-test-framework": "^5.4",
+		"league/flysystem-memory": "^1.0",
+		"phpunit/phpunit": "^12.5"
 	},
     "autoload-dev": {
         "psr-4": {
