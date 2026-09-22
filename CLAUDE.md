@@ -82,9 +82,11 @@ static `get()` wrappers in `Option/`; default classes is read directly in `fnBan
 ### Setup has no schema
 
 `Setup.php` creates nothing. Its only work is `enqueuePostUpgradeCleanUp()` on XF 2.3+, guarded by
-`\XF::$versionId` because `addon.json` still declares XF 2.1.0 and PHP 7.0. **Shipped code must
-stay PHP 7.0-compatible** — no typed properties, no `void` return types, no arrow functions. The
-tests may use newer syntax because they never ship.
+`\XF::$versionId` because `addon.json` declares XF 2.2.0, which has no such method. XF 2.2
+itself runs on PHP 7.0, so **shipped code must stay PHP 7.0-compatible** — no typed properties, no
+`void` return types, no arrow functions — and must use core's pre-2.3 class names, which 2.3
+aliases forward and 2.2 cannot resolve the other way. The tests may use newer syntax because they
+never ship.
 
 ## Traps
 

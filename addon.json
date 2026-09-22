@@ -13,17 +13,13 @@
         "Git Repository": "https://github.com/hampel/banner-generator-xenforo"
     },
     "require": {
-        "php": [
-            "7.0.0",
-            "PHP 7.0+"
-        ],
         "php-ext/gd": [
             "*",
             "GD extension"
         ],
         "XF": [
-            "2010070",
-            "XenForo 2.1.0+"
+            "2020070",
+            "XenForo 2.2.0+"
         ]
     },
     "icon": "fa-ad"
