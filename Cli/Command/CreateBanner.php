@@ -34,7 +34,7 @@ class CreateBanner extends Command
 			->addOption(
 				'force',
 				'f',
-				InputOption::VALUE_OPTIONAL,
+				InputOption::VALUE_NONE,
 				"Force - over-write existing banner"
 			);
 	}
@@ -67,10 +67,10 @@ class CreateBanner extends Command
 		{
 			$colourKeysList = implode(", ", $colourKeys);
 			$output->writeln("<error>Colour must be one of [{$colourKeysList}]</error>");
-			return 0;
+			return 1;
 		}
 
-		$force = boolval($input->getOption('force'));
+		$force = $input->getOption('force');
 
 		$dest = $banner->generateBanner($width, $height, $colour, $force);
 

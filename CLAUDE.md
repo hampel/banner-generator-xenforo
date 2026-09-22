@@ -95,9 +95,6 @@ never ship.
   `id`, the class list, the URL built from `colour` — goes through `\XF::escapeString()`, and the
   dimensions are cast to `int`. A new argument needs the same treatment, since a template may pass
   a variable where an admin would type a literal.
-- **`banner:create --force` without a value does not force.** The option is declared
-  `VALUE_OPTIONAL`, so a bare `--force` yields `null` and `boolval()` makes it false; only
-  `--force=1` regenerates. An invalid `--colour` also exits `0`.
 - **The generated-image tests assert a file size of 180 bytes**, which depends on the GD and
   libpng build. A size failure on a different machine is not necessarily a code change.
 - **`build.json` moves every root `*.md` into the release zip root.** A new dev-only markdown file
