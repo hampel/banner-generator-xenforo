@@ -13,9 +13,4 @@ abstract class TestCase extends BaseTestCase
     protected $rootDir = '../../../..';
 
     protected $addonsToLoad = ['Hampel/BannerGenerator'];
-
-	protected function getMockData($file)
-	{
-		return file_get_contents(__DIR__ . '/mock/' . $file);
-	}
 }
