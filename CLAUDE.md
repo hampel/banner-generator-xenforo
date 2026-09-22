@@ -83,6 +83,13 @@ and builds both the `data://` path and the public URL (via `applyExternalDataUrl
 pattern. **Adding a colour needs a matching `hampel_bannergenerator_colour_<key>` phrase**, or the
 default-colour option's select renders a missing phrase.
 
+**The image is drawn with GD directly, not through XenForo's `Image\Manager`, and that is
+deliberate.** XenForo's resource standards ask for its image handling where possible, but its API
+creates, resizes, crops and composites — it cannot fill a colour or draw text, which is the whole
+of a labelled placeholder. And `Manager::createImage()` returns an Imagick image on a forum whose
+driver is Imagick, which GD's drawing functions cannot touch. `addon.json` requires `php-ext/gd`
+for this reason.
+
 ### Options
 
 Three options in the `hampelBannerGenerator` group: save path (default `banner-test`), default
