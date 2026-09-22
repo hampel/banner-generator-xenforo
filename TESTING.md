@@ -8,8 +8,7 @@ release.
 
 | surface | what it is for |
 |---|---|
-| class extension `XF\Template\Templater` | adds `fnBanner()`, the implementation of the `banner()` template function |
-| listener `templater_setup` | maps the template function name `banner` to `fnBanner` — without it the extension is never called |
+| listener `templater_setup` | registers the `banner()` template function, implemented by `Template\BannerFunction::render()` |
 | listener `app_setup` | registers the `banner` container key, `SubContainer\Banner`, through `extendClass()` |
 | options `hampelBannerGeneratorSavePath`, `…DefaultColour`, `…DefaultClasses` | where banners are written, the colour used when none is given, the classes added to every banner |
 | CLI command `banner:create` | generates one banner by hand; `--force` regenerates an existing one |
@@ -17,12 +16,13 @@ release.
 
 ## Fragile points
 
-- **The extension and the listener only work as a pair.** Removing or renaming either makes
-  `{{ banner(...) }}` fail in every template that uses it, and nothing at install time says so.
-- **`fnBanner()` turns template escaping off, so it has to escape its own output.** Every argument
-  that reaches an HTML attribute is escaped and the dimensions are cast to integers. A new argument
-  needs the same treatment, since a template can pass a variable where an admin would type a
-  literal.
+- **The `templater_setup` listener is the only thing that makes `banner()` exist.** Disabling or
+  renaming it makes `{{ banner(...) }}` fail in every template that uses it, and nothing at install
+  time says so.
+- **The banner function turns template escaping off, so it has to escape its own output.** Every
+  argument that reaches an HTML attribute is escaped and the dimensions are cast to integers. A new
+  argument needs the same treatment, since a template can pass a variable where an admin would
+  type a literal.
 - **The arguments are positional.** 1.1.0 inserted `class` before `colour`, so a template written
   for 1.0.0 that passed a colour now passes it as a class, and gets the default colour.
 - **`generateBanner()` returns `""` when the file already exists and `null` on failure.** Anything
@@ -51,8 +51,9 @@ The suite boots the installed forum with only this add-on loaded (`$addonsToLoad
   generation into an in-memory filesystem: a new image, an existing one left alone, a forced
   regeneration, and the errors logged for an invalid size or colour. Generated images are checked
   for type, dimensions and background colour.
-- **`fnBanner()`** — the markup for every combination of `id`, `class` and default classes,
-  escaping of hostile input, and empty output for an invalid size.
+- **The `banner()` function**, rendered through the templater as a template calls it — the markup
+  for every combination of `id`, `class` and default classes, escaping of hostile input, and empty
+  output for an invalid size.
 - **`banner:create`** — exit codes, `--force` and `-f`, rejection of `--force=1`, and the three
   outcomes of generation. Input is parsed with `ArgvInput`, as on the console.
 

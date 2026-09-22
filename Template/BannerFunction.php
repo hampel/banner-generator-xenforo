@@ -1,16 +1,18 @@
-<?php namespace Hampel\BannerGenerator\XF\Template;
+<?php namespace Hampel\BannerGenerator\Template;
 
 use Hampel\BannerGenerator\SubContainer\Banner;
 
-class Templater extends XFCP_Templater
+class BannerFunction
 {
-	public function fnBanner($templater, &$escape, $width, $height, $id = '', $class = '', $colour = '')
+	public static function render($templater, &$escape, $width, $height, $id = '', $class = '', $colour = '')
 	{
 		$width = intval($width);
 		$height = intval($height);
 
+		$app = \XF::app();
+
 		/** @var Banner $banner */
-		$banner = $this->app->get('banner');
+		$banner = $app->get('banner');
 
 		$banner->generateBanner($width, $height, $colour);
 
@@ -23,7 +25,7 @@ class Templater extends XFCP_Templater
 
 		$divHtml = empty($id) ? '' : ' id="' . \XF::escapeString($id) . '"';
 
-		$options = $this->app->options();
+		$options = $app->options();
 		$defaultClasses = $options['hampelBannerGeneratorDefaultClasses'];
 		$classes = empty($defaultClasses) ? $class : trim("{$defaultClasses} {$class}");
 		$classHtml = empty($classes) ? '' : ' class="' . \XF::escapeString($classes) . '"';

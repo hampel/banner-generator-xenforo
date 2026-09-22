@@ -1,6 +1,7 @@
 <?php namespace Hampel\BannerGenerator;
 
 use Hampel\BannerGenerator\SubContainer\Banner;
+use Hampel\BannerGenerator\Template\BannerFunction;
 use XF\App;
 use XF\Container;
 
@@ -30,7 +31,7 @@ class Listener
 	 */
 	public static function templaterSetup(\XF\Container $container, \XF\Template\Templater &$templater)
 	{
-		$templater->addFunction('banner', 'fnBanner');
+		$templater->addFunction('banner', [BannerFunction::class, 'render']);
 	}
 
 }

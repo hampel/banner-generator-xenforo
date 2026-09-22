@@ -49,22 +49,22 @@ php ../../../../cmd.php xf-addon:build-release Hampel/BannerGenerator
 
 ## Architecture
 
-### One template function, wired by two separate mechanisms
+### One template function, registered by a listener — no class extension
 
-`{{ banner(width, height, id, class, colour) }}` in a template needs **both** of these, and
-removing either breaks it silently:
-
-1. **The class extension** `XF\Template\Templater` → `XF/Template/Templater.php`, which adds the
-   `fnBanner()` method.
-2. **The `templater_setup` listener** `Listener::templaterSetup()`, which maps the template
-   function name `banner` to that method name.
+`{{ banner(width, height, id, class, colour) }}` is `Template\BannerFunction::render()`, which the
+`templater_setup` listener registers with `addFunction()`. **Do not reintroduce a
+`XF\Template\Templater` extension to hold it.** `addFunction()` takes any callable and the
+templater passes it `($templater, &$escape, ...arguments)`, so one event at one point does the
+whole job — which is where XenForo's resource standards prefer a listener. Versions up to 1.1.1
+did extend the templater; after upgrading, their `XF/Template/Templater.php` may linger on disk,
+unreferenced and so unreachable.
 
 Argument order is positional and was a breaking change in 1.1.0 (`class` inserted before
 `colour`). Keep it stable.
 
 ### Banners are generated lazily, on every render
 
-`fnBanner()` calls `generateBanner()` each time the template renders. That method checks
+`render()` calls `generateBanner()` each time the template renders. That method checks
 `data://<save path>/<w>x<h>-<colour>.png` on the abstracted filesystem and returns early when the
 file exists, so the cost after the first render is one `has()` call. Nothing ever deletes a
 banner: changing the save path, the default colour or a size leaves the old files in `data/`.
@@ -72,7 +72,7 @@ banner: changing the save path, the default colour or a size leaves the old file
 `generateBanner()` returns the path when it wrote a file, `""` when the file already existed, and
 `null` after logging an error — a size below 1, an unknown colour, or a GD failure. **Callers
 must tell `""` from `null`**: `banner:create` exits 1 on `null`. Invalid input is logged on every
-render until the template is fixed, and `fnBanner()` renders nothing for an invalid size, so that
+render until the template is fixed, and `render()` returns nothing for an invalid size, so that
 the template around it survives.
 
 ### The `banner` sub-container owns the colours and the paths
@@ -88,7 +88,7 @@ default-colour option's select renders a missing phrase.
 Three options in the `hampelBannerGenerator` group: save path (default `banner-test`), default
 colour (default `green`, rendered by `Option\DefaultColour::renderOption()` from the colour table),
 and default classes (default `banner-ad`). Save path and default colour are read through the
-static `get()` wrappers in `Option/`; default classes is read directly in `fnBanner()`.
+static `get()` wrappers in `Option/`; default classes is read directly in `render()`.
 
 ### Setup has no schema
 
@@ -101,11 +101,11 @@ never ship.
 
 ## Traps
 
-- **`fnBanner()` sets `$escape = false`, so it escapes its own inputs.** It returns markup, which
-  the templater would otherwise escape; in exchange every argument that reaches an attribute —
-  `id`, the class list, the URL built from `colour` — goes through `\XF::escapeString()`, and the
-  dimensions are cast to `int`. A new argument needs the same treatment, since a template may pass
-  a variable where an admin would type a literal.
+- **`BannerFunction::render()` sets `$escape = false`, so it escapes its own inputs.** It returns
+  markup, which the templater would otherwise escape; in exchange every argument that reaches an
+  attribute — `id`, the class list, the URL built from `colour` — goes through
+  `\XF::escapeString()`, and the dimensions are cast to `int`. A new argument needs the same
+  treatment, since a template may pass a variable where an admin would type a literal.
 - **`build.json` moves every root `*.md` into the release zip root.** A new dev-only markdown file
   ships unless it is added to the `rm -fv` line that runs before that `mv`, and to the
   `export-ignore` list in `.gitattributes` for `git archive`.
