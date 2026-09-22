@@ -98,8 +98,6 @@ never ship.
   `id`, the class list, the URL built from `colour` — goes through `\XF::escapeString()`, and the
   dimensions are cast to `int`. A new argument needs the same treatment, since a template may pass
   a variable where an admin would type a literal.
-- **The generated-image tests assert a file size of 180 bytes**, which depends on the GD and
-  libpng build. A size failure on a different machine is not necessarily a code change.
 - **`build.json` moves every root `*.md` into the release zip root.** A new dev-only markdown file
   ships unless it is added to the `rm -fv` line that runs before that `mv`, and to the
   `export-ignore` list in `.gitattributes` for `git archive`.

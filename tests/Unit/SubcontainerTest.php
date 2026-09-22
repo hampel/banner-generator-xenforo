@@ -16,6 +16,23 @@ class SubcontainerTest extends TestCase
 		$this->banner = $this->app()->get('banner');
 	}
 
+	protected function assertBannerImage($path, $width, $height, $colourKey)
+	{
+		$data = $this->app->fs()->read($path);
+
+		$info = getimagesizefromstring($data);
+		$this->assertNotFalse($info, "{$path} is not an image");
+		$this->assertEquals([$width, $height, IMAGETYPE_PNG], [$info[0], $info[1], $info[2]]);
+
+		// the label is drawn from (5, 5), so the corner is always background
+		$im = imagecreatefromstring($data);
+		$pixel = imagecolorsforindex($im, imagecolorat($im, 0, 0));
+		$this->assertEquals(
+			$this->banner->getColour($colourKey)['background'],
+			[$pixel['red'], $pixel['green'], $pixel['blue']]
+		);
+	}
+
 	// ------------------------------------------------
 
 	public function test_initialisation()
@@ -164,7 +181,7 @@ class SubcontainerTest extends TestCase
 
 		// check new file has been created
 		$this->assertTrue($this->app->fs()->has($path));
-		$this->assertEquals(180, $this->app->fs()->getSize($path));
+		$this->assertBannerImage($path, 100, 50, 'red');
 	}
 
 	public function test_generateBanner_generates_default_image()
@@ -182,7 +199,7 @@ class SubcontainerTest extends TestCase
 
 		// check new file has been created
 		$this->assertTrue($this->app->fs()->has($path));
-		$this->assertEquals(180, $this->app->fs()->getSize($path));
+		$this->assertBannerImage($path, 100, 50, 'blue');
 	}
 
 	public function test_generateBanner_generates_new_image_when_forced()
@@ -206,6 +223,6 @@ class SubcontainerTest extends TestCase
 
 		// check new file has been created
 		$this->assertTrue($this->app->fs()->has($path));
-		$this->assertEquals(180, $this->app->fs()->getSize($path));
+		$this->assertBannerImage($path, 100, 50, 'red');
 	}
 }
