@@ -9,7 +9,6 @@ class Banner extends AbstractSubContainer
 {
 	public function initialize()
 	{
-//		$app = $this->app;
 		$container = $this->container;
 
 		$container['colours'] = function($c)

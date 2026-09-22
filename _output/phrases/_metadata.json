@@ -67,9 +67,9 @@
     },
     "option.hampelBannerGeneratorSavePath.txt": {
         "global_cache": false,
-        "version_id": 1000031,
-        "version_string": "1.0.0 Beta 1",
-        "hash": "f3c7c46d5fc1b33f6a8159f65e0c33cf"
+        "version_id": 1010211,
+        "version_string": "1.1.2a1",
+        "hash": "06820290fd4fcdafec64c33d6c9ad844"
     },
     "option_explain.hampelBannerGeneratorDefaultClasses.txt": {
         "global_cache": false,
@@ -85,9 +85,9 @@
     },
     "option_explain.hampelBannerGeneratorSavePath.txt": {
         "global_cache": false,
-        "version_id": 1000031,
-        "version_string": "1.0.0 Beta 1",
-        "hash": "1727c1f29f8fd460b75ead242d0933a4"
+        "version_id": 1010211,
+        "version_string": "1.1.2a1",
+        "hash": "5698e780b4fb8258601a6898c22c8a3e"
     },
     "option_group.hampelBannerGenerator.txt": {
         "global_cache": false,
