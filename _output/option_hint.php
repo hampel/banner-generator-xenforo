@@ -13,7 +13,7 @@ namespace XF;
 /**
  * @property string|null $hampelBannerGeneratorDefaultClasses Default CSS classes
  * @property string|null $hampelBannerGeneratorDefaultColour Default banner colour
- * @property string|null $hampelBannerGeneratorSavePath Banner Save Path
+ * @property string|null $hampelBannerGeneratorSavePath Banner save path
  */
 class Options
 {
