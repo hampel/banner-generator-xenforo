@@ -40,6 +40,22 @@ run, and the suite dies before its first test.
 option `true` whatever its mode, so it cannot tell a flag from an optional-value option — which is
 exactly the bug `--force` once had. `tests/Unit/CreateBannerTest.php` shows the form.
 
+### Why the Flysystem pin and the ignored advisories are deliberate
+
+**`league/flysystem-memory` is capped at `^1.0` on purpose, and must stay there.** `swapFs()`
+builds a Flysystem **1.x** mount manager, and XenForo core loads `league/flysystem` 1.x at
+runtime, so the 3.x adapter would neither satisfy the helper nor match the library the add-on
+actually runs against. It is `require-dev` only; the add-on ships no vendor tree.
+
+**`composer.json` therefore ignores two Flysystem advisories, with the reason beside each.**
+Composer refuses to load a package carrying an advisory, and the one in question affects every
+release up to 3.35.2 while 1.x is end-of-life — so there is no version to move to, and leaving it
+blocked would freeze every other dependency. Revisit when XenForo core moves off Flysystem 1.x.
+
+**`phpunit.xml` keeps `failOnPhpunitDeprecation="true"`, which the framework's own copy dropped.**
+It was dropped there to support PHPUnit 10.5, which has no such attribute; this suite pins
+`^12.5`, which does, so keeping it is the stricter setting.
+
 `cmd.php` resolves the install from its own location, so XF commands run unchanged from here:
 
 ```bash
