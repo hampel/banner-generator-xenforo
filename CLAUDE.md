@@ -92,6 +92,14 @@ must tell `""` from `null`**: `banner:create` exits 1 on `null`. Invalid input i
 render until the template is fixed, and `render()` returns nothing for an invalid size, so that
 the template around it survives.
 
+**Logging every render is deliberate, and repeats are not suppressed.** One row per page view is
+a lot on a busy forum, and the usual answer would be to log the first occurrence and silence it
+for a while. Not here: this add-on is a tool for a developer styling advert placements, who is
+working in the template that is wrong and watching the error log while they do it. A suppressed
+repeat is one they expect to see and do not, which reads as the fault being fixed. The volume is
+bounded by fixing the template, and a forum running this in production has a larger problem than
+its log size.
+
 ### The `banner` sub-container owns the colours and the paths
 
 `Listener::appSetup()` registers `$app['banner']` through `extendClass()`, so other add-ons can

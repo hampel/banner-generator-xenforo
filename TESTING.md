@@ -27,9 +27,11 @@ release.
   for 1.0.0 that passed a colour now passes it as a class, and gets the default colour.
 - **`generateBanner()` returns `""` when the file already exists and `null` on failure.** Anything
   calling it has to tell the two apart; treating both as "nothing to do" hides failures.
-- **Invalid input is logged on every render.** A size below 1 or an unknown colour writes an error
-  each time the template renders, until the template is fixed. An invalid size renders nothing, so
-  the surrounding template still renders.
+- **Invalid input is logged on every render, on purpose.** A size below 1 or an unknown colour
+  writes an error each time the template renders, until the template is fixed, and repeats are
+  deliberately not suppressed — the developer fixing the template is watching the error log, and a
+  silenced repeat reads as the fault being fixed. An invalid size renders nothing, so the
+  surrounding template still renders.
 - **Generated files are never deleted.** Changing the save path, the default colour or a banner's
   size leaves the old PNGs in `data/`.
 - **The colour phrases are looked up by composed name**, so `xf-dev:unused-phrase-finder` reports
