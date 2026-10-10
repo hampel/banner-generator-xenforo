@@ -9,5 +9,15 @@
         "psr-4": {
             "Tests\\": "tests/"
         }
-    }
+    },
+	"config": {
+		"policy": {
+			"advisories": {
+				"ignore": {
+					"PKSA-w9tt-7782-78jx": "Flysystem 1.x is a dev-only test dependency, pinned to match the version XenForo core loads at runtime; every release up to 3.35.2 is affected and 1.x is end-of-life, so no fixed version exists",
+					"PKSA-pwh8-d4fr-nywn": "as above - league/flysystem-memory ^1.0 requires flysystem ~1.0, and the add-on ships no vendor tree"
+				}
+			}
+		}
+	}
 }
