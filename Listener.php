@@ -34,4 +34,13 @@ class Listener
 		$templater->addFunction('banner', [BannerFunction::class, 'render']);
 	}
 
+	/**
+	 * Declare which of this add-on's settings are secrets. It has none.
+	 *
+	 * @param array $declarations
+	 */
+	public static function adminApiRedaction(array &$declarations)
+	{
+		$declarations['Hampel/BannerGenerator'] = [];
+	}
 }
