@@ -123,6 +123,26 @@ itself runs on PHP 7.0, so **shipped code must stay PHP 7.0-compatible** — no 
 aliases forward and 2.2 cannot resolve the other way. The tests may use newer syntax because they
 never ship.
 
+### No `config` or `validate` commands, deliberately
+
+**This add-on has nothing to self-check, so it ships neither command**, against the three
+questions in the `xenforo-addon-validate` skill:
+
+- **Nothing is opaque.** The save path, the colour and the default classes are each their own
+  evidence — an unknown colour is refused at render and logged, and a changed save path just
+  writes banners elsewhere.
+- **Nothing runs unattended.** No cron, no jobs, no outbound calls: a banner is generated during
+  a page render or by `banner:create`.
+- **`config` would restate one ACP screen.** All three options live on it, and no `config.php`
+  key is read.
+
+GD is not a reason either: `addon.json` requires `php-ext/gd`, so XenForo refuses to install
+without it, and a GD failure at render is logged.
+
+**Reopen this** if the add-on gains a credential or an endpoint, anything scheduled, or state a
+reader cannot see on the options screen. Every command costs two lines of `cmd.php list` on every
+forum that installs the add-on.
+
 ## Traps
 
 - **`BannerFunction::render()` sets `$escape = false`, so it escapes its own inputs.** It returns
