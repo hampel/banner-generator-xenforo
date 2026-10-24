@@ -160,8 +160,8 @@ class Banner extends AbstractSubContainer
 	 *
 	 * @return bool
 	 *
-	 * @phpstan-assert-if-true int<1, max>|non-empty-string $width
-	 * @phpstan-assert-if-true int<1, max>|non-empty-string $height
+	 * @phpstan-assert-if-true =int<1, max>|string $width
+	 * @phpstan-assert-if-true =int<1, max>|string $height
 	 */
 	public function isValidSize($width, $height)
 	{
