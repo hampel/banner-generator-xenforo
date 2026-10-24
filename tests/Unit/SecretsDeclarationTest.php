@@ -12,12 +12,12 @@ class SecretsDeclarationTest extends TestCase
 
 	// ------------------------------------------------
 
-	public function test_it_declares_this_add_on_only()
+	public function test_it_declares_this_add_on_only(): void
 	{
 		$this->assertSame(['Hampel/BannerGenerator'], array_keys($this->declarations()));
 	}
 
-	public function test_every_declared_secret_is_an_option_this_add_on_has()
+	public function test_every_declared_secret_is_an_option_this_add_on_has(): void
 	{
 		$problems = [];
 
@@ -32,7 +32,7 @@ class SecretsDeclarationTest extends TestCase
 				continue;
 			}
 
-			$members = json_decode(file_get_contents($file), true)['sub_options'] ?? [];
+			$members = $this->subOptions($parts[0]);
 			if (isset($parts[1]) && !in_array($parts[1], $members, true) && !in_array('*', $members, true))
 			{
 				$problems[] = "{$path}: not a member of {$parts[0]}";
@@ -42,7 +42,7 @@ class SecretsDeclarationTest extends TestCase
 		$this->assertSame([], $problems);
 	}
 
-	public function test_an_option_or_member_that_reads_like_a_credential_is_declared_or_decided()
+	public function test_an_option_or_member_that_reads_like_a_credential_is_declared_or_decided(): void
 	{
 		$decided = array_merge(self::NOT_SECRETS, $this->declared()['options']);
 
@@ -60,8 +60,7 @@ class SecretsDeclarationTest extends TestCase
 				$undecided[] = $optionId;
 			}
 
-			$file = $this->addOnRoot() . "/_output/options/{$optionId}.json";
-			foreach (json_decode(file_get_contents($file), true)['sub_options'] ?? [] as $member)
+			foreach ($this->subOptions($optionId) as $member)
 			{
 				$path = "{$optionId}.{$member}";
 				if (preg_match(self::CREDENTIAL, $member) && !in_array($path, $decided, true))
@@ -74,7 +73,7 @@ class SecretsDeclarationTest extends TestCase
 		$this->assertSame([], $undecided, 'declare each as a secret, or add it to NOT_SECRETS');
 	}
 
-	public function test_it_declares_every_option_the_add_on_has_as_not_secret()
+	public function test_it_declares_every_option_the_add_on_has_as_not_secret(): void
 	{
 		// the whole declaration for this add-on: no secrets, and no config.php keys read
 		$this->assertSame([], $this->declared()['options']);
@@ -84,6 +83,9 @@ class SecretsDeclarationTest extends TestCase
 
 	// ------------------------------------------------
 
+	/**
+	 * @return array<string, array<string, string[]>>
+	 */
 	private function declarations(): array
 	{
 		$declarations = [];
@@ -92,11 +94,19 @@ class SecretsDeclarationTest extends TestCase
 		return $declarations;
 	}
 
+	/**
+	 * @return array{options: string[], config: string[]}
+	 */
 	private function declared(): array
 	{
-		return $this->declarations()['Hampel/BannerGenerator'] + ['options' => [], 'config' => []];
+		$declared = $this->declarations()['Hampel/BannerGenerator'];
+
+		return ['options' => $declared['options'] ?? [], 'config' => $declared['config'] ?? []];
 	}
 
+	/**
+	 * @return list<string>
+	 */
 	private function optionIds(): array
 	{
 		$ids = [];
@@ -110,6 +120,24 @@ class SecretsDeclarationTest extends TestCase
 		}
 
 		return $ids;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function subOptions(string $optionId): array
+	{
+		$json = file_get_contents($this->addOnRoot() . "/_output/options/{$optionId}.json");
+		$this->assertIsString($json);
+
+		$option = json_decode($json, true);
+		$this->assertIsArray($option);
+
+		$members = $option['sub_options'] ?? [];
+		$this->assertIsArray($members);
+		$this->assertContainsOnlyString($members);
+
+		return $members;
 	}
 
 	private function addOnRoot(): string

@@ -6,19 +6,21 @@ use XF\Phrase;
 
 class SubcontainerTest extends TestCase
 {
-	/** @var Banner */
-	protected $banner;
+	protected Banner $banner;
 
 	protected function setUp() : void
 	{
 		parent::setUp();
 
-		$this->banner = $this->app()->get('banner');
+		$banner = $this->app()->get('banner');
+		$this->assertInstanceOf(Banner::class, $banner);
+		$this->banner = $banner;
 	}
 
-	protected function assertBannerImage($path, $width, $height, $colourKey)
+	protected function assertBannerImage(string $path, int $width, int $height, string $colourKey): void
 	{
-		$data = $this->app->fs()->read($path);
+		$data = $this->app()->fs()->read($path);
+		$this->assertIsString($data, "{$path} could not be read");
 
 		$info = getimagesizefromstring($data);
 		$this->assertNotFalse($info, "{$path} is not an image");
@@ -26,29 +28,34 @@ class SubcontainerTest extends TestCase
 
 		// the label is drawn from (5, 5), so the corner is always background
 		$im = imagecreatefromstring($data);
-		$pixel = imagecolorsforindex($im, imagecolorat($im, 0, 0));
+		$this->assertNotFalse($im);
+		$index = imagecolorat($im, 0, 0);
+		$this->assertNotFalse($index);
+		$pixel = imagecolorsforindex($im, $index);
+
+		$colour = $this->banner->getColour($colourKey);
+		$this->assertNotNull($colour);
 		$this->assertEquals(
-			$this->banner->getColour($colourKey)['background'],
+			$colour['background'],
 			[$pixel['red'], $pixel['green'], $pixel['blue']]
 		);
 	}
 
 	// ------------------------------------------------
 
-	public function test_initialisation()
+	public function test_initialisation(): void
 	{
-		$this->assertIsArray($this->banner->getColours());
+		$this->assertArrayHasKey('black', $this->banner->getColours());
 	}
 
-	public function test_getColourKeys_returns_array()
+	public function test_getColourKeys_returns_array(): void
 	{
 		$colourKeys = $this->banner->getColourKeys();
 
-		$this->assertIsArray($colourKeys);
-		$this->assertTrue(in_array('black', $colourKeys));
+		$this->assertContains('black', $colourKeys);
 	}
 
-	public function test_getColour_returns_null()
+	public function test_getColour_returns_null(): void
 	{
 		$this->assertNull($this->banner->getColour(null));
 		$this->assertNull($this->banner->getColour(''));
@@ -56,7 +63,7 @@ class SubcontainerTest extends TestCase
 		$this->assertNull($this->banner->getColour('foo'));
 	}
 
-	public function test_getColour_returns_colour_array()
+	public function test_getColour_returns_colour_array(): void
 	{
 		$colour = $this->banner->getColour('black');
 		$this->assertIsArray($colour);
@@ -65,15 +72,14 @@ class SubcontainerTest extends TestCase
 		$this->assertArrayHasKey('phrase', $colour);
 	}
 
-	public function test_getColoursForSelect_returns_array()
+	public function test_getColoursForSelect_returns_array(): void
 	{
 		$colours = $this->banner->getColoursForSelect();
-		$this->assertIsArray($colours);
 		$this->assertArrayHasKey('black', $colours);
 		$this->assertInstanceOf(Phrase::class, $colours['black']);
 	}
 
-	public function test_getAbstractedDataPath()
+	public function test_getAbstractedDataPath(): void
 	{
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
 
@@ -82,7 +88,7 @@ class SubcontainerTest extends TestCase
 		$this->assertEquals('data://foo/100x50-bar.png', $path);
 	}
 
-	public function test_getAbstractedDataPath_default_colour()
+	public function test_getAbstractedDataPath_default_colour(): void
 	{
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
 		$this->setOption('hampelBannerGeneratorDefaultColour', 'baz');
@@ -92,32 +98,38 @@ class SubcontainerTest extends TestCase
 		$this->assertEquals('data://foo/100x50-baz.png', $path);
 	}
 
-	public function test_getBannerUrl()
+	public function test_getBannerUrl(): void
 	{
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
 
 		$path = $this->banner->getBannerUrl(100, 50, 'bar');
 
-		$basePath = rtrim($this->app()->request()->getBasePath(), '/') . '/';
+		$basePath = $this->app()->request()->getBasePath();
 		$externalDataUrl = $this->app()->config('externalDataUrl');
+		$this->assertIsString($basePath);
+		$this->assertIsString($externalDataUrl);
+		$basePath = rtrim($basePath, '/') . '/';
 
 		$this->assertEquals($basePath . $externalDataUrl . '/foo/100x50-bar.png', $path);
 	}
 
-	public function test_getBannerUrl_default_colour()
+	public function test_getBannerUrl_default_colour(): void
 	{
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
 		$this->setOption('hampelBannerGeneratorDefaultColour', 'baz');
 
 		$path = $this->banner->getBannerUrl(100, 50);
 
-		$basePath = rtrim($this->app()->request()->getBasePath(), '/') . '/';
+		$basePath = $this->app()->request()->getBasePath();
 		$externalDataUrl = $this->app()->config('externalDataUrl');
+		$this->assertIsString($basePath);
+		$this->assertIsString($externalDataUrl);
+		$basePath = rtrim($basePath, '/') . '/';
 
 		$this->assertEquals($basePath . $externalDataUrl . '/foo/100x50-baz.png', $path);
 	}
 
-	public function test_generateBanner_logs_error_for_invalid_colour()
+	public function test_generateBanner_logs_error_for_invalid_colour(): void
 	{
 		$this->fakesErrors();
 
@@ -126,7 +138,7 @@ class SubcontainerTest extends TestCase
 		$this->assertErrorLogged("Invalid colour specified for banner test: foo");
 	}
 
-	public function test_isValidSize()
+	public function test_isValidSize(): void
 	{
 		$this->assertTrue($this->banner->isValidSize(100, 50));
 		$this->assertTrue($this->banner->isValidSize('100', '50'));
@@ -135,7 +147,7 @@ class SubcontainerTest extends TestCase
 		$this->assertFalse($this->banner->isValidSize('auto', 50));
 	}
 
-	public function test_generateBanner_logs_error_for_invalid_size()
+	public function test_generateBanner_logs_error_for_invalid_size(): void
 	{
 		$this->fakesErrors();
 
@@ -144,7 +156,7 @@ class SubcontainerTest extends TestCase
 		$this->assertErrorLogged("Invalid dimensions specified for banner test: 0x50");
 	}
 
-	public function test_generateBanner_returns_empty_for_existing_image()
+	public function test_generateBanner_returns_empty_for_existing_image(): void
 	{
 		$this->swapFs('data');
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
@@ -152,22 +164,22 @@ class SubcontainerTest extends TestCase
 		$path = 'data://foo/100x50-red.png';
 
 		// check there's nothing there now
-		$this->assertFalse($this->app->fs()->has($path));
+		$this->assertFalse($this->app()->fs()->has($path));
 
 		// create a file at our destination
-		$this->app->fs()->write($path, '');
+		$this->app()->fs()->write($path, '');
 
-		$this->assertTrue($this->app->fs()->has($path));
-		$this->assertEquals(0, $this->app->fs()->getSize($path));
+		$this->assertTrue($this->app()->fs()->has($path));
+		$this->assertEquals(0, $this->app()->fs()->getSize($path));
 
 		$this->assertEmpty($this->banner->generateBanner(100, 50, 'red'));
 
 		// check new file hasn't been created
-		$this->assertTrue($this->app->fs()->has($path));
-		$this->assertEquals(0, $this->app->fs()->getSize($path));
+		$this->assertTrue($this->app()->fs()->has($path));
+		$this->assertEquals(0, $this->app()->fs()->getSize($path));
 	}
 
-	public function test_generateBanner_generates_image()
+	public function test_generateBanner_generates_image(): void
 	{
 		$this->swapFs('data');
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
@@ -175,16 +187,16 @@ class SubcontainerTest extends TestCase
 		$path = 'data://foo/100x50-red.png';
 
 		// check there's nothing there now
-		$this->assertFalse($this->app->fs()->has($path));
+		$this->assertFalse($this->app()->fs()->has($path));
 
 		$this->assertEquals($path, $this->banner->generateBanner(100, 50, 'red'));
 
 		// check new file has been created
-		$this->assertTrue($this->app->fs()->has($path));
+		$this->assertTrue($this->app()->fs()->has($path));
 		$this->assertBannerImage($path, 100, 50, 'red');
 	}
 
-	public function test_generateBanner_generates_default_image()
+	public function test_generateBanner_generates_default_image(): void
 	{
 		$this->swapFs('data');
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
@@ -193,16 +205,16 @@ class SubcontainerTest extends TestCase
 		$path = 'data://foo/100x50-blue.png';
 
 		// check there's nothing there now
-		$this->assertFalse($this->app->fs()->has($path));
+		$this->assertFalse($this->app()->fs()->has($path));
 
 		$this->assertEquals($path, $this->banner->generateBanner(100, 50));
 
 		// check new file has been created
-		$this->assertTrue($this->app->fs()->has($path));
+		$this->assertTrue($this->app()->fs()->has($path));
 		$this->assertBannerImage($path, 100, 50, 'blue');
 	}
 
-	public function test_generateBanner_generates_new_image_when_forced()
+	public function test_generateBanner_generates_new_image_when_forced(): void
 	{
 		$this->swapFs('data');
 		$this->setOption('hampelBannerGeneratorSavePath', 'foo');
@@ -210,19 +222,19 @@ class SubcontainerTest extends TestCase
 		$path = 'data://foo/100x50-red.png';
 
 		// check there's nothing there now
-		$this->assertFalse($this->app->fs()->has($path));
+		$this->assertFalse($this->app()->fs()->has($path));
 
 		// create a file at our destination
-		$this->app->fs()->write($path, '');
+		$this->app()->fs()->write($path, '');
 
 		// check there's nothing there now
-		$this->assertTrue($this->app->fs()->has($path));
-		$this->assertEquals(0, $this->app->fs()->getSize($path));
+		$this->assertTrue($this->app()->fs()->has($path));
+		$this->assertEquals(0, $this->app()->fs()->getSize($path));
 
 		$this->assertEquals($path, $this->banner->generateBanner(100, 50, 'red', true));
 
 		// check new file has been created
-		$this->assertTrue($this->app->fs()->has($path));
+		$this->assertTrue($this->app()->fs()->has($path));
 		$this->assertBannerImage($path, 100, 50, 'red');
 	}
 }

@@ -1,13 +1,13 @@
 <?php namespace Tests\Unit;
 
 use Hampel\BannerGenerator\SubContainer\Banner;
+use Mockery\MockInterface;
 use Tests\TestCase;
 use XF\Template\Templater;
 
 class BannerFunctionTest extends TestCase
 {
-	/** @var Templater */
-	protected $templater;
+	protected Templater $templater;
 
 	protected function setUp() : void
 	{
@@ -16,12 +16,12 @@ class BannerFunctionTest extends TestCase
 		// the app's own templater, so the function is registered by the templater_setup listener
 		$this->templater = $this->app()->templater();
 
-		$this->mock('banner', Banner::class, function ($mock) {
+		$this->mock('banner', Banner::class, function (MockInterface $mock) {
 			$mock->allows([
 				'generateBanner' => null,
 				'getBannerUrl' => 'foo',
 			]);
-			$mock->allows('isValidSize')->andReturnUsing(function ($width, $height) {
+			$mock->allows('isValidSize')->andReturnUsing(function (int|string $width, int|string $height): bool {
 				return intval($width) > 0 && intval($height) > 0;
 			});
 		});
@@ -29,17 +29,20 @@ class BannerFunctionTest extends TestCase
 
 	// ------------------------------------------------
 
-	protected function banner(...$args)
+	protected function banner(mixed ...$args): string
 	{
-		return $this->templater->func('banner', $args);
+		$html = $this->templater->func('banner', $args);
+		$this->assertIsString($html);
+
+		return $html;
 	}
 
-	public function test_banner_function_is_registered()
+	public function test_banner_function_is_registered(): void
 	{
 		$this->assertStringStartsWith('<div', $this->banner(200, 100));
 	}
 
-	public function test_Banner_defaults()
+	public function test_Banner_defaults(): void
 	{
 		$this->setOption('hampelBannerGeneratorDefaultClasses', '');
 
@@ -52,7 +55,7 @@ class BannerFunctionTest extends TestCase
 		$this->assertEquals($expected, $banner);
 	}
 
-	public function test_Banner_defaults_default_class()
+	public function test_Banner_defaults_default_class(): void
 	{
 		$this->setOption('hampelBannerGeneratorDefaultClasses', 'default-class');
 
@@ -65,7 +68,7 @@ class BannerFunctionTest extends TestCase
 		$this->assertEquals($expected, $banner);
 	}
 
-	public function test_Banner_id()
+	public function test_Banner_id(): void
 	{
 		$this->setOption('hampelBannerGeneratorDefaultClasses', '');
 
@@ -78,7 +81,7 @@ class BannerFunctionTest extends TestCase
 		$this->assertEquals($expected, $banner);
 	}
 
-	public function test_Banner_id_class()
+	public function test_Banner_id_class(): void
 	{
 		$this->setOption('hampelBannerGeneratorDefaultClasses', '');
 
@@ -91,7 +94,7 @@ class BannerFunctionTest extends TestCase
 		$this->assertEquals($expected, $banner);
 	}
 
-	public function test_Banner_escapes_attributes()
+	public function test_Banner_escapes_attributes(): void
 	{
 		$this->setOption('hampelBannerGeneratorDefaultClasses', '');
 
@@ -104,14 +107,14 @@ class BannerFunctionTest extends TestCase
 		$this->assertEquals($expected, $banner);
 	}
 
-	public function test_Banner_returns_nothing_for_invalid_size()
+	public function test_Banner_returns_nothing_for_invalid_size(): void
 	{
 		$this->assertSame('', $this->banner(0, 90));
 		$this->assertSame('', $this->banner('auto', 90));
 		$this->assertSame('', $this->banner(728, -1));
 	}
 
-	public function test_Banner_id_class_default_class()
+	public function test_Banner_id_class_default_class(): void
 	{
 		$this->setOption('hampelBannerGeneratorDefaultClasses', 'default-class');
 

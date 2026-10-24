@@ -2,6 +2,7 @@
 
 use Hampel\BannerGenerator\Cli\Command\CreateBanner;
 use Hampel\BannerGenerator\SubContainer\Banner;
+use Mockery\MockInterface;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -9,8 +10,7 @@ use Tests\TestCase;
 
 class CreateBannerTest extends TestCase
 {
-	/** @var BufferedOutput */
-	protected $output;
+	protected BufferedOutput $output;
 
 	protected function setUp() : void
 	{
@@ -20,16 +20,22 @@ class CreateBannerTest extends TestCase
 	}
 
 	// ArgvInput is what the console parses with, and it treats flags differently from ArrayInput
-	protected function runCommand(array $args)
+	/**
+	 * @param list<string> $args
+	 */
+	protected function runCommand(array $args): int
 	{
 		$command = new CreateBanner();
 
 		return $command->run(new ArgvInput(array_merge(['cmd.php'], $args)), $this->output);
 	}
 
-	protected function mockBanner($generateArgs = null, $returns = null)
+	/**
+	 * @param list<mixed>|null $generateArgs null when generateBanner() must not be called
+	 */
+	protected function mockBanner(?array $generateArgs = null, ?string $returns = null): void
 	{
-		$this->mock('banner', Banner::class, function ($mock) use ($generateArgs, $returns) {
+		$this->mock('banner', Banner::class, function (MockInterface $mock) use ($generateArgs, $returns) {
 			$mock->allows('getColourKeys')->andReturns(['red', 'blue']);
 
 			if ($generateArgs === null)
@@ -45,7 +51,7 @@ class CreateBannerTest extends TestCase
 
 	// ------------------------------------------------
 
-	public function test_missing_width_fails()
+	public function test_missing_width_fails(): void
 	{
 		$this->mockBanner();
 
@@ -53,7 +59,7 @@ class CreateBannerTest extends TestCase
 		$this->assertStringContainsString('Width must be specified', $this->output->fetch());
 	}
 
-	public function test_zero_height_fails()
+	public function test_zero_height_fails(): void
 	{
 		$this->mockBanner();
 
@@ -61,7 +67,7 @@ class CreateBannerTest extends TestCase
 		$this->assertStringContainsString('Height must be specified', $this->output->fetch());
 	}
 
-	public function test_invalid_colour_fails()
+	public function test_invalid_colour_fails(): void
 	{
 		$this->mockBanner();
 
@@ -69,7 +75,7 @@ class CreateBannerTest extends TestCase
 		$this->assertStringContainsString('Colour must be one of [red, blue]', $this->output->fetch());
 	}
 
-	public function test_without_force_does_not_force()
+	public function test_without_force_does_not_force(): void
 	{
 		$this->mockBanner([100, 50, 'red', false], 'data://foo/100x50-red.png');
 
@@ -77,21 +83,21 @@ class CreateBannerTest extends TestCase
 		$this->assertStringContainsString('Banner created: [data://foo/100x50-red.png]', $this->output->fetch());
 	}
 
-	public function test_force_forces()
+	public function test_force_forces(): void
 	{
 		$this->mockBanner([100, 50, 'red', true], 'data://foo/100x50-red.png');
 
 		$this->assertEquals(0, $this->runCommand(['--width=100', '--height=50', '--colour=red', '--force']));
 	}
 
-	public function test_short_force_forces()
+	public function test_short_force_forces(): void
 	{
 		$this->mockBanner([100, 50, 'red', true], 'data://foo/100x50-red.png');
 
 		$this->assertEquals(0, $this->runCommand(['-x', '100', '-y', '50', '-c', 'red', '-f']));
 	}
 
-	public function test_force_does_not_accept_a_value()
+	public function test_force_does_not_accept_a_value(): void
 	{
 		$this->mockBanner();
 
@@ -101,7 +107,7 @@ class CreateBannerTest extends TestCase
 		$this->runCommand(['--width=100', '--height=50', '--force=1']);
 	}
 
-	public function test_existing_banner_is_reported()
+	public function test_existing_banner_is_reported(): void
 	{
 		$this->mockBanner([100, 50, 'red', false], '');
 
@@ -109,7 +115,7 @@ class CreateBannerTest extends TestCase
 		$this->assertStringContainsString('Banner already exists', $this->output->fetch());
 	}
 
-	public function test_generation_failure_fails()
+	public function test_generation_failure_fails(): void
 	{
 		$this->mockBanner([100, 50, 'red', false], null);
 
