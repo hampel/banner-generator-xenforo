@@ -64,16 +64,16 @@
         },
         {
             "name": "hampel/xenforo-test-framework",
-            "version": "5.21.0",
+            "version": "5.40.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hampel/xenforo-test-framework.git",
-                "reference": "292015df25ad08e6c183dbf4fd0844f30ccd2b65"
+                "reference": "3e32f70150aa6370bf1a256ee2c0006d12143e1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hampel/xenforo-test-framework/zipball/292015df25ad08e6c183dbf4fd0844f30ccd2b65",
-                "reference": "292015df25ad08e6c183dbf4fd0844f30ccd2b65",
+                "url": "https://api.github.com/repos/hampel/xenforo-test-framework/zipball/3e32f70150aa6370bf1a256ee2c0006d12143e1f",
+                "reference": "3e32f70150aa6370bf1a256ee2c0006d12143e1f",
                 "shasum": ""
             },
             "require": {
@@ -85,6 +85,7 @@
                 "league/flysystem-memory": ">=2.0"
             },
             "require-dev": {
+                "hampel/xenforo-phpstan": "^0.8.1",
                 "league/flysystem": "^1.1.4",
                 "league/flysystem-memory": "^1.0",
                 "nesbot/carbon": "^2.50|^3.0",
@@ -93,6 +94,7 @@
                 "xenforo-ltd/xf-cs-fixer": "^1.2"
             },
             "suggest": {
+                "hampel/xenforo-phpstan": "^0.8 - with extension.neon included, PHPStan types the entity makeEntity() and createEntity() return",
                 "league/flysystem-memory": "^1.0 - required when swapping out filesystems",
                 "nesbot/carbon": "Gives better control when dealing with time."
             },
@@ -125,7 +127,7 @@
                 "issues": "https://github.com/hampel/xenforo-test-framework/issues",
                 "source": "https://github.com/hampel/xenforo-test-framework"
             },
-            "time": "2026-10-10T09:14:11+00:00"
+            "time": "2026-10-24T01:25:57+00:00"
         },
         {
             "name": "league/flysystem",
@@ -1008,16 +1010,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.38",
+            "version": "12.5.40",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1e87ad87fe57665a7f6e99a6e467329c11e851cc"
+                "reference": "76bd3198f16aeb375a4d5f3626471445aed0966e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1e87ad87fe57665a7f6e99a6e467329c11e851cc",
-                "reference": "1e87ad87fe57665a7f6e99a6e467329c11e851cc",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/76bd3198f16aeb375a4d5f3626471445aed0966e",
+                "reference": "76bd3198f16aeb375a4d5f3626471445aed0966e",
                 "shasum": ""
             },
             "require": {
@@ -1086,7 +1088,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.38"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.40"
             },
             "funding": [
                 {
@@ -1094,7 +1096,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-10-05T05:49:30+00:00"
+            "time": "2026-10-16T05:55:07+00:00"
         },
         {
             "name": "sebastian/cli-parser",
