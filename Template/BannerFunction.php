@@ -4,6 +4,19 @@ use Hampel\BannerGenerator\SubContainer\Banner;
 
 class BannerFunction
 {
+	/**
+	 * Arguments after $escape are a template's, positionally.
+	 *
+	 * @param \XF\Template\Templater $templater
+	 * @param bool $escape
+	 * @param int|string $width
+	 * @param int|string $height
+	 * @param string $id
+	 * @param string $class added to the default classes
+	 * @param string $colour the default colour when empty
+	 *
+	 * @return string
+	 */
 	public static function render($templater, &$escape, $width, $height, $id = '', $class = '', $colour = '')
 	{
 		$width = intval($width);
@@ -26,7 +39,7 @@ class BannerFunction
 		$divHtml = empty($id) ? '' : ' id="' . \XF::escapeString($id) . '"';
 
 		$options = $app->options();
-		$defaultClasses = $options['hampelBannerGeneratorDefaultClasses'];
+		$defaultClasses = $options->hampelBannerGeneratorDefaultClasses;
 		$classes = empty($defaultClasses) ? $class : trim("{$defaultClasses} {$class}");
 		$classHtml = empty($classes) ? '' : ' class="' . \XF::escapeString($classes) . '"';
 

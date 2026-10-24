@@ -11,6 +11,8 @@ class Listener
 	 * Setup banner container
 	 *
 	 * @param App $app
+	 *
+	 * @return void
 	 */
 	public static function appSetup(App $app)
 	{
@@ -28,6 +30,8 @@ class Listener
 	 *
 	 * @param Container $container
 	 * @param \XF\Template\Templater $templater
+	 *
+	 * @return void
 	 */
 	public static function templaterSetup(\XF\Container $container, \XF\Template\Templater &$templater)
 	{
@@ -37,7 +41,9 @@ class Listener
 	/**
 	 * Declare which of this add-on's settings are secrets. It has none.
 	 *
-	 * @param array $declarations
+	 * @param array<string, array<string, string[]>> $declarations
+	 *
+	 * @return void
 	 */
 	public static function adminApiRedaction(array &$declarations)
 	{

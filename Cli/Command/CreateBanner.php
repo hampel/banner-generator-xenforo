@@ -1,6 +1,7 @@
 <?php namespace Hampel\BannerGenerator\Cli\Command;
 
 use Hampel\BannerGenerator\Option\DefaultColour;
+use Hampel\BannerGenerator\SubContainer\Banner;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -8,6 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateBanner extends Command
 {
+	/**
+	 * @return void
+	 */
 	protected function configure()
 	{
 		$this
@@ -41,25 +45,28 @@ class CreateBanner extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$width = intval($input->getOption('width'));
+		$width = $input->getOption('width');
+		$width = is_string($width) ? intval($width) : 0;
 		if ($width <= 0)
 		{
 			$output->writeln("<error>Width must be specified</error>");
 			return 1;
 		}
 
-		$height = intval($input->getOption('height'));
+		$height = $input->getOption('height');
+		$height = is_string($height) ? intval($height) : 0;
 		if ($height <= 0)
 		{
 			$output->writeln("<error>Height must be specified</error>");
 			return 1;
 		}
 
+		/** @var Banner $banner */
 		$banner = \XF::app()->get('banner');
 		$colourKeys = $banner->getColourKeys();
 
 		$colour = $input->getOption('colour');
-		if (empty($colour))
+		if (!is_string($colour) || empty($colour))
 		{
 			$colour = DefaultColour::get();
 		}
@@ -70,7 +77,7 @@ class CreateBanner extends Command
 			return 1;
 		}
 
-		$force = $input->getOption('force');
+		$force = $input->getOption('force') === true;
 
 		$dest = $banner->generateBanner($width, $height, $colour, $force);
 

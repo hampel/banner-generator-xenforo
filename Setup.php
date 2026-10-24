@@ -14,6 +14,9 @@ class Setup extends AbstractSetup
         // nothing to do
     }
 
+    /**
+     * @return void
+     */
     public function postUpgrade($previousVersion, array &$stateChanges)
     {
         if (\XF::$versionId >= 2030000) { // XF 2.3+
