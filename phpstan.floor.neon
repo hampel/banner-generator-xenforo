@@ -1,0 +1,13 @@
+# Holds the shipped code to the add-on's PHP floor: XenForo 2.2 runs on PHP 7.0, and PHPStan goes
+# no lower than 7.1. Reports syntax newer than the floor, not functions; tests are excluded because
+# PHPUnit 12 cannot be read as 7.1 code.
+includes:
+    - phpstan.neon
+
+parameters:
+    phpVersion:
+        min: 70100
+        max: 80500
+    excludePaths:
+        analyse:
+            - tests
