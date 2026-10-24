@@ -45,6 +45,8 @@ release.
 composer install
 vendor/bin/phpunit                          # from the add-on root
 vendor/bin/phpunit --order-by=random
+vendor/bin/phpstan analyse                  # level max, no baseline
+vendor/bin/phpstan analyse -c phpstan.floor.neon   # shipped code against PHP 7.1 syntax
 ```
 
 The suite boots the installed forum with only this add-on loaded (`$addonsToLoad`), and covers:

@@ -25,6 +25,9 @@ composer install                              # vendor/ is gitignored; required 
 vendor/bin/phpunit
 vendor/bin/phpunit --testsuite Unit           # Feature holds only a placeholder
 vendor/bin/phpunit --filter test_generateBanner_generates_image
+vendor/bin/phpstan analyse                    # static analysis, level max
+vendor/bin/phpstan analyse -c phpstan.floor.neon   # shipped code against the PHP floor
+vendor/bin/xenforo-phpstan generate --check   # is the forum's generated set current?
 ```
 
 **Run PHPUnit from the add-on root.** `tests/TestCase.php` boots XenForo from
@@ -55,6 +58,30 @@ blocked would freeze every other dependency. Revisit when XenForo core moves off
 **`phpunit.xml` keeps `failOnPhpunitDeprecation="true"`, which the framework's own copy dropped.**
 It was dropped there to support PHPUnit 10.5, which has no such attribute; this suite pins
 `^12.5`, which does, so keeping it is the stricter setting.
+
+### Static analysis runs at level max, and nothing is ignored
+
+`hampel/xenforo-phpstan` lets PHPStan see the XenForo install without analysing it; its README is
+the reference. **There is no baseline and no `ignoreErrors`, so a new report is a new problem.**
+
+- **Shipped code is typed by docblock only.** `SubContainer\Banner` is extendable through
+  `extendClass()` and the floor is PHP 7.0, so a native type added to a public method would be a
+  fatal error in a subclass already written without it. The tests never ship and are typed
+  natively.
+- **`phpstan.floor.neon` analyses the shipped code alone with `phpVersion` min `70100`**, which
+  reports syntax newer than the floor — not functions, which PHPStan reads from the PHP it runs
+  on. 7.1 is as low as PHPStan goes; XenForo 2.2's 7.0 is one step below it.
+- **`isValidSize()` asserts with the equality form, `=int<1, max>|string`**, which narrows an
+  integer and says nothing about a string. The plain form let PHPStan conclude
+  `isValidSize('auto', 50)` is always true, which `intval()` makes false.
+- **A value core declares no type for is narrowed by an inline `@var` naming the reason**, as for
+  `File::getTempFile()` and `applyExternalDataUrl()`. In the tests it is asserted instead, which
+  narrows it as well.
+
+**`vendor/bin/xenforo-phpstan generate` writes into the forum's `internal_data/phpstan/`, shared
+by every add-on analysed against that forum**, not into this repository. Ask `generate --check`
+first: it writes nothing. Re-run `generate` only after a XenForo upgrade or a change to the class
+extensions installed on the forum.
 
 `cmd.php` resolves the install from its own location, so XF commands run unchanged from here:
 
@@ -129,7 +156,7 @@ static `get()` wrappers in `Option/`; default classes is read directly in `rende
 itself runs on PHP 7.0, so **shipped code must stay PHP 7.0-compatible** — no typed properties, no
 `void` return types, no arrow functions — and must use core's pre-2.3 class names, which 2.3
 aliases forward and 2.2 cannot resolve the other way. The tests may use newer syntax because they
-never ship.
+never ship. `phpstan.floor.neon` checks the syntax half of this; the class names it cannot check.
 
 ### No `config` or `validate` commands, deliberately
 
