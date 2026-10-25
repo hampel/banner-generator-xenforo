@@ -31,10 +31,7 @@ class BannerFunctionTest extends TestCase
 
 	protected function banner(mixed ...$args): string
 	{
-		$html = $this->templater->func('banner', $args);
-		$this->assertIsString($html);
-
-		return $html;
+		return $this->templater->func('banner', $args);
 	}
 
 	public function test_banner_function_is_registered(): void

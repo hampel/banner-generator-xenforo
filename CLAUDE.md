@@ -74,9 +74,9 @@ the reference. **There is no baseline and no `ignoreErrors`, so a new report is 
 - **`isValidSize()` asserts with the equality form, `=int<1, max>|string`**, which narrows an
   integer and says nothing about a string. The plain form let PHPStan conclude
   `isValidSize('auto', 50)` is always true, which `intval()` makes false.
-- **A value core declares no type for is narrowed by an inline `@var` naming the reason**, as for
-  `File::getTempFile()` and `applyExternalDataUrl()`. In the tests it is asserted instead, which
-  narrows it as well.
+- **A value core leaves untyped is asserted in the tests, never assumed** — `App::config()` with a
+  key is `mixed` by design, since what an entry holds is a fact about the install. The package
+  stubs the core methods the shipped code calls, so it needs no inline `@var`.
 
 **`vendor/bin/xenforo-phpstan generate` writes into the forum's `internal_data/phpstan/`, shared
 by every add-on analysed against that forum**, not into this repository. Ask `generate --check`

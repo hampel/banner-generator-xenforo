@@ -106,7 +106,6 @@ class SubcontainerTest extends TestCase
 
 		$basePath = $this->app()->request()->getBasePath();
 		$externalDataUrl = $this->app()->config('externalDataUrl');
-		$this->assertIsString($basePath);
 		$this->assertIsString($externalDataUrl);
 		$basePath = rtrim($basePath, '/') . '/';
 
@@ -122,7 +121,6 @@ class SubcontainerTest extends TestCase
 
 		$basePath = $this->app()->request()->getBasePath();
 		$externalDataUrl = $this->app()->config('externalDataUrl');
-		$this->assertIsString($basePath);
 		$this->assertIsString($externalDataUrl);
 		$basePath = rtrim($basePath, '/') . '/';
 

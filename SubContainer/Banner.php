@@ -139,8 +139,12 @@ class Banner extends AbstractSubContainer
 
 		imagestring($im, 5, 5, 5,  sprintf("%dx%d", $width, $height), $text_color);
 
-		/** @var string $tempFile core declares no return type */
 		$tempFile = File::getTempFile();
+		if ($tempFile === false)
+		{
+			\XF::logError("Could not generate image for banner test - no temporary file could be created");
+			return null;
+		}
 
 		imagepng($im, $tempFile);
 
@@ -199,10 +203,7 @@ class Banner extends AbstractSubContainer
 			$colour = DefaultColour::get();
 		}
 
-		/** @var string $url core declares no return type */
-		$url = \XF::app()->applyExternalDataUrl(sprintf('%s/%dx%d-%s.png', SavePath::get(), $width, $height, $colour));
-
-		return $url;
+		return \XF::app()->applyExternalDataUrl(sprintf('%s/%dx%d-%s.png', SavePath::get(), $width, $height, $colour));
 	}
 
 	/**
