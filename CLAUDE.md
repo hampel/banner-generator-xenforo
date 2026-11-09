@@ -42,9 +42,20 @@ run, and the suite dies before its first test.
 **`tests/TestCase.php` unmasks deprecations after the boot, and must keep doing so.** XenForo
 boots with `error_reporting(E_ALL & ~E_DEPRECATED)`, so without it no PHP deprecation reaches
 PHPUnit and `failOnDeprecation` passes on code that emits them. That hid a null array offset on
-PHP 8.5 (2026-11-09) that only PHPStan reported. XenForo's handler then turns a deprecation into an
-`ErrorException`, so the dev-only Flysystem 1.x memory adapter, which has an implicit-nullable
-parameter deprecated in PHP 8.4, is loaded before the mask is lifted.
+PHP 8.5 (2026-11-09) that only PHPStan reported. Two consequences shape the `setUp()`:
+
+- **XenForo's handler turns a deprecation into an `ErrorException`**, so the test errors rather
+  than PHPUnit recording a deprecation, and the dev-only Flysystem 1.x memory adapter, with an
+  implicit-nullable parameter deprecated in PHP 8.4, would fail every `swapFs()` test.
+- **A deprecation raised under core's `src/vendor/` is logged to the forum's error log instead**,
+  and execution continues. Core's own Flysystem 1.x and `league/event` added six rows per run.
+
+Both are avoided by loading those classes while the mask still applies; `tearDown()` restores the
+level. **The first test to build the public router will error on PHP 8.5, and the fault is
+XenForo 2.3.13's, not this add-on's**: the router's container closure builds a link, and the pather
+does `isset($paths[$modifier])` with a null modifier. So `dispatch()`, `buildLink()`,
+`renderTemplate()` or a BB code render cannot be tested here under PHP 8.5 until core is fixed. None
+of the current tests builds one.
 
 **Drive `banner:create` in tests through `ArgvInput`, never `ArrayInput`.** `ArrayInput` hands an
 option `true` whatever its mode, so it cannot tell a flag from an optional-value option — which is

@@ -14,14 +14,28 @@ abstract class TestCase extends BaseTestCase
 
     protected $addonsToLoad = ['Hampel/BannerGenerator'];
 
+    private int $errorReporting;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         // XenForo boots with E_DEPRECATED masked, which hides every PHP deprecation from
-        // failOnDeprecation. The Flysystem 1.x memory adapter (dev-only, pinned) carries one of
-        // its own, so load it while the mask still applies.
+        // failOnDeprecation. Flysystem 1.x carries PHP 8.4 deprecations of its own: the memory
+        // adapter (dev-only, pinned) would throw, and core's copy under src/vendor/ is logged to
+        // the forum's error log instead. So load them while the mask still applies.
         class_exists(\League\Flysystem\Memory\MemoryAdapter::class);
-        error_reporting(E_ALL);
+        class_exists(\League\Flysystem\MountManager::class);
+        class_exists(\League\Flysystem\Filesystem::class);
+        class_exists(\League\Flysystem\EventableFilesystem\EventableFilesystem::class);
+
+        $this->errorReporting = error_reporting(E_ALL);
+    }
+
+    protected function tearDown(): void
+    {
+        error_reporting($this->errorReporting);
+
+        parent::tearDown();
     }
 }
