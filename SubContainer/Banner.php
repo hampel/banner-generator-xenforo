@@ -246,6 +246,12 @@ class Banner extends AbstractSubContainer
 	 */
 	public function getColour($colour)
 	{
+		// PHP 8.5 deprecates null as an array offset
+		if ($colour === null)
+		{
+			return null;
+		}
+
 		return $this->getColours()[$colour] ?? null;
 	}
 }
