@@ -13,4 +13,15 @@ abstract class TestCase extends BaseTestCase
     protected $rootDir = '../../../..';
 
     protected $addonsToLoad = ['Hampel/BannerGenerator'];
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // XenForo boots with E_DEPRECATED masked, which hides every PHP deprecation from
+        // failOnDeprecation. The Flysystem 1.x memory adapter (dev-only, pinned) carries one of
+        // its own, so load it while the mask still applies.
+        class_exists(\League\Flysystem\Memory\MemoryAdapter::class);
+        error_reporting(E_ALL);
+    }
 }

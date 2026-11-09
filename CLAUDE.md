@@ -39,6 +39,13 @@ exist.
 Without it, any other installed add-on that vendors a different PHPUnit major is loaded into the
 run, and the suite dies before its first test.
 
+**`tests/TestCase.php` unmasks deprecations after the boot, and must keep doing so.** XenForo
+boots with `error_reporting(E_ALL & ~E_DEPRECATED)`, so without it no PHP deprecation reaches
+PHPUnit and `failOnDeprecation` passes on code that emits them. That hid a null array offset on
+PHP 8.5 (2026-11-09) that only PHPStan reported. XenForo's handler then turns a deprecation into an
+`ErrorException`, so the dev-only Flysystem 1.x memory adapter, which has an implicit-nullable
+parameter deprecated in PHP 8.4, is loaded before the mask is lifted.
+
 **Drive `banner:create` in tests through `ArgvInput`, never `ArrayInput`.** `ArrayInput` hands an
 option `true` whatever its mode, so it cannot tell a flag from an optional-value option — which is
 exactly the bug `--force` once had. `tests/Unit/CreateBannerTest.php` shows the form.
