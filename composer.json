@@ -4,7 +4,7 @@
 		"hampel/xenforo-test-framework": "^5.4",
 		"league/flysystem-memory": "^1.0",
 		"phpunit/phpunit": "^12.5",
-		"hampel/xenforo-phpstan": "^0.10"
+		"hampel/xenforo-phpstan": "^0.11"
 	},
     "autoload-dev": {
         "psr-4": {
