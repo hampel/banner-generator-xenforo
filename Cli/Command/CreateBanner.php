@@ -1,7 +1,6 @@
 <?php namespace Hampel\BannerGenerator\Cli\Command;
 
 use Hampel\BannerGenerator\Option\DefaultColour;
-use Hampel\BannerGenerator\SubContainer\Banner;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -61,7 +60,6 @@ class CreateBanner extends Command
 			return 1;
 		}
 
-		/** @var Banner $banner */
 		$banner = \XF::app()->get('banner');
 		$colourKeys = $banner->getColourKeys();
 

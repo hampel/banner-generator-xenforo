@@ -21,3 +21,9 @@ parameters:
     # types this add-on's own three options, and still reports a mistyped name
     stubFiles:
         - _output/option_hint.php
+
+    # the add-on's sub-container, registered in Listener::appSetup() through extendClass(), so an
+    # extension of it is still this class
+    xenforo:
+        container:
+            banner: Hampel\BannerGenerator\SubContainer\Banner

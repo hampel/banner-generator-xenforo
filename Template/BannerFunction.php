@@ -1,7 +1,5 @@
 <?php namespace Hampel\BannerGenerator\Template;
 
-use Hampel\BannerGenerator\SubContainer\Banner;
-
 class BannerFunction
 {
 	/**
@@ -24,7 +22,6 @@ class BannerFunction
 
 		$app = \XF::app();
 
-		/** @var Banner $banner */
 		$banner = $app->get('banner');
 
 		$banner->generateBanner($width, $height, $colour);

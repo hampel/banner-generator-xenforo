@@ -94,7 +94,12 @@ the reference. **There is no baseline and no `ignoreErrors`, so a new report is 
   `isValidSize('auto', 50)` is always true, which `intval()` makes false.
 - **A value core leaves untyped is asserted in the tests, never assumed** — `App::config()` with a
   key is `mixed` by design, since what an entry holds is a fact about the install. The package
-  stubs the core methods the shipped code calls, so it needs no inline `@var`.
+  stubs the core methods the shipped code calls.
+- **The `banner` container key is declared in `phpstan.neon`, so its reads carry no `@var`.** The
+  declaration is a claim checked against nothing, like the `@var` it replaced: change it if
+  `Listener::appSetup()` ever registers something else. The one inline `@var` left is on
+  `colours` in the sub-container, because its type is the class's own `Colour` alias, which a
+  declaration does not resolve.
 
 **`vendor/bin/xenforo-phpstan generate` writes into the forum's `internal_data/phpstan/`, shared
 by every add-on analysed against that forum**, not into this repository. Ask `generate --check`
